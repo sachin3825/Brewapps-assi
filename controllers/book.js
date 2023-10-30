@@ -116,3 +116,30 @@ exports.getBookById = async (req, res) => {
     });
   }
 };
+
+exports.deleteBook = async (req, res) => {
+  try {
+    const bookId = req.params.id;
+
+    const deletedBook = await Book.findByIdAndRemove(bookId);
+
+    if (!deletedBook) {
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Book deleted successfully",
+      book: deletedBook,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
